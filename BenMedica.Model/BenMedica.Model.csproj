@@ -1,0 +1,10 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<AssemblyName>BenMedica.Model</AssemblyName>
+	<RootNamespace>BenMedica.Model</RootNamespace>
+	<ProjectGuid>{76D97505-7E18-4560-B429-7FB07BD34071}</ProjectGuid>
+  </PropertyGroup>
+
+</Project>
