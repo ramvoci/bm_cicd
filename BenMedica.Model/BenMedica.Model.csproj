@@ -7,4 +7,8 @@
 	<ProjectGuid>{76D97505-7E18-4560-B429-7FB07BD34071}</ProjectGuid>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.8" />
+  </ItemGroup>
+
 </Project>
