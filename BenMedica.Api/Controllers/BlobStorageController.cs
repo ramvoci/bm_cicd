@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using System;
@@ -12,7 +13,7 @@ namespace BenMedica.Api.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class BlobStorageController : ControllerBase {
-       private readonly ILogger<BlobStorageController> _logger;
+        private readonly ILogger<BlobStorageController> _logger;
         private readonly IBlobService _blobService;
 
         public BlobStorageController(ILogger<BlobStorageController> logger, IBlobService blobService) {
@@ -26,8 +27,15 @@ namespace BenMedica.Api.Controllers {
         /// <returns>get the blob content</returns>
         [HttpGet("{filename}")]
         public async Task<IActionResult> Get(string filename) {
-            var response = await _blobService.GetBlobAsync(filename);
-            return Ok(response.Content);
+            try {
+                var response = await _blobService.GetBlobAsync(filename);
+                return Ok(response.Content);
+
+            } catch (Exception) {
+
+                return this.StatusCode(StatusCodes.Status404NotFound, "File not found in the blob");
+            }
+
         }
     }
 }

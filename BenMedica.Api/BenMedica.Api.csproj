@@ -7,11 +7,12 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<ProjectGuid>{E464E562-74E4-4586-B558-50A57A300D34}</ProjectGuid>
 		<NoWin32Manifest>true</NoWin32Manifest>
+		<UserSecretsId>61fef1f8-ef64-438f-972b-29882d510950</UserSecretsId>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-	  <NoWarn>1701;1702;1591</NoWarn>
-	  <DocumentationFile>obj\Debug\netcoreapp3.1\BenMedica.Api.xml</DocumentationFile>
+	  <NoWarn>1701;1702</NoWarn>
+	  <DocumentationFile></DocumentationFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -20,7 +21,8 @@
 		<PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />
 		<PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.1" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.AzureKeyVault" Version="3.1.15" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+		<!--<PackageReference Include="Microsoft.Azure.KeyVault" Version="3.0.5" />-->
+		<!--<PackageReference Include="Microsoft.Azure.Services.AppAuthentication" Version="1.6.1" />-->
 		<PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.4" />
 	</ItemGroup>
 

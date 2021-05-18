@@ -26,22 +26,22 @@ namespace BenMedica.Api.Controllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Get drug codes
-        /// </summary>
-        /// <returns>Drug values</returns>
-        [HttpGet]
-        public IEnumerable<Drug> Get()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new Drug
-            {
-                Date = DateTime.Now.AddDays(index),
-                Codes = "RF2343",
-                Description = Description[rng.Next(Description.Length)]
-            })
-            .ToArray();
-        }
+        ///// <summary>
+        ///// Get drug codes
+        ///// </summary>
+        ///// <returns>Drug values</returns>
+        //[HttpGet]
+        //public IEnumerable<Drug> Get()
+        //{
+        //    var rng = new Random();
+        //    return Enumerable.Range(1, 5).Select(index => new Drug
+        //    {
+        //        Date = DateTime.Now.AddDays(index),
+        //        Codes = "RF2343",
+        //        Description = Description[rng.Next(Description.Length)]
+        //    })
+        //    .ToArray();
+        //}
         /// <summary>
         /// get the response for request drugs and its alterntives drugs
         /// </summary>

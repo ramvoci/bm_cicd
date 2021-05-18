@@ -16,30 +16,24 @@ namespace BenMedica.Api {
             throw new NotImplementedException();
         }
 
-        // public Task<BlobInfo> IBlobService.GetBlobAsync(string name) {
-        //    var containerClient = _blobServiceClient.GetBlobContainerClient("ci-benmedica-dev");
-        //    var blobClient = containerClient.GetBlobClient(name);
-
-        //    return await blobClient.DownloadAsync();
-        //}
-
         /// <summary>
         /// Get blob
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
         public async Task<BlobDownloadInfo> GetBlobAsync(string name) {
-            var containerClient =  _blobServiceClient.GetBlobContainerClient("ci-benmedica-dev");
-            var blobClient= containerClient.GetBlobClient(name);
-            
-               return await blobClient.DownloadAsync();
-                //using (var streamReader = new StreamReader(response.Value.Content)) {
-                //    while (!streamReader.EndOfStream) {
-                //        var line = await streamReader.ReadLineAsync();
-                //        //Console.WriteLine(line);
-                //    }
-                //}
-            
+
+            var containerClient = _blobServiceClient.GetBlobContainerClient("ci-benmedica-dev");
+            var blobClient = containerClient.GetBlobClient(name);
+
+            return await blobClient.DownloadAsync();
+            //using (var streamReader = new StreamReader(response.Value.Content)) {
+            //    while (!streamReader.EndOfStream) {
+            //        var line = await streamReader.ReadLineAsync();
+            //        //Console.WriteLine(line);
+            //    }
+            //}
+
         }
 
         public Task<IEnumerable<string>> ListBlobsAsync() {
@@ -53,14 +47,5 @@ namespace BenMedica.Api {
         public Task UploadFileBlobAsync(string filePath, string fileName) {
             throw new NotImplementedException();
         }
-
-        //async Task<BlobDownloadInfo> IBlobService.GetBlobAsync(string name) {
-        //    var containerClient = _blobServiceClient.GetBlobContainerClient("ci-benmedica-dev");
-        //    var blobClient = containerClient.GetBlobClient(name);
-
-        //    return await blobClient.DownloadAsync();
-        //}
-
-        
     }
 }
