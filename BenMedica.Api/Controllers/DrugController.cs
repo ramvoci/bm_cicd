@@ -88,11 +88,11 @@ namespace BenMedica.Api.Controllers {
                  }
                 */
 
-                var response = JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
+                //var response = JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
+                //    NullValueHandling = NullValueHandling.Ignore
+                //});
 
-                return Ok(response);
+                //return Ok(response);
             } catch (Exception) {
 
                 return this.StatusCode(StatusCodes.Status400BadRequest, "unable to  process the request");
