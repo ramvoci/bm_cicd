@@ -1,6 +1,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace BenMedica.Api
 {
@@ -8,13 +9,22 @@ namespace BenMedica.Api
     {
         public string TransactionId { get; set; }
 
-        public string PayerID { get; set; }
+        public string PayerId { get; set; }
 
         public string DrugDatabaseSourceCode { get; set; }
+        public Guid RequestId => Guid.NewGuid();
+        public DateTime RequestTime => DateTime.Now;
+        public string ApiVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 
-        public Request Request { get; set; }
+        public bool ErrorOccurred { get; set; }
+
+        public List<Error> Errors { get; set; }
+
+        public Source Source { get; set; }
       
-        public List<Request> Alternatives { get; set; }
+        public List<Source> Alternatives { get; set; }
+
+
 
 
     }
@@ -26,13 +36,13 @@ namespace BenMedica.Api
         
     }
 
-    public class Request
+    public class Source
     {
         public string DispensibleDrugDescription { get; set; }
 
         public DispensibleDrug DispensibleDrug { get; set; }
 
-        public int DaysSupply { get; set; }
+        public string DaysSupply { get; set; }
 
         public string Quantity { get; set; }
 
@@ -40,8 +50,11 @@ namespace BenMedica.Api
 
         public bool ErrorOccurred { get; set; }
 
-        public string ErrorCode { get; set; }
+        public List<Error> Errors { get; set; } 
+    }
 
+    public class Error {
+        public string ErrorCode { get; set; }
         public string ErrorDescription { get; set; }
     }
 }

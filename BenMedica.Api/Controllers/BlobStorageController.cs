@@ -25,17 +25,17 @@ namespace BenMedica.Api.Controllers {
         /// Get the blob using filename
         /// </summary>
         /// <returns>get the blob content</returns>
-        [HttpGet("{filename}")]
-        public async Task<IActionResult> Get(string filename) {
-            try {
-                var response = await _blobService.GetBlobAsync(filename);
-                return Ok(response.Content);
+        //[HttpGet("{filename}")]
+        //public async Task<IActionResult> Get(string filename) {
+        //    try {
+        //        var response = await _blobService.GetBlobAsync(filename);
+        //        return Ok(response.Content);
 
-            } catch (Exception) {
+        //    } catch (Exception) {
 
-                return this.StatusCode(StatusCodes.Status404NotFound, "File not found in the blob");
-            }
+        //        return this.StatusCode(StatusCodes.Status404NotFound, "File not found in the blob");
+        //    }
 
-        }
+        //}
     }
 }
