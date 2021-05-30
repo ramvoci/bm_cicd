@@ -24,11 +24,11 @@ namespace BenMedica.Api.Processor {
                         foreach (var item in dispenseCodes.Alternatives) {
                             switch (item.DispensibleDrug.Code) {
                                 case "00074329013":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues("30", "30", "C64933");
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
 
                                 case "00078037905":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues("30", "30", "C64933");
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
 
                                 default:
@@ -53,11 +53,11 @@ namespace BenMedica.Api.Processor {
                         foreach (var item in dispenseCodes.Alternatives) {
                             switch (item.DispensibleDrug.Code) {
                                 case "23155050101":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues("30", "90", "C64933");
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
                                     break;
 
                                 case "00185067401":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues("30", "90", "C64933");
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
                                     break;
 
                                 default:
@@ -74,7 +74,7 @@ namespace BenMedica.Api.Processor {
                         foreach (var item in dispenseCodes.Alternatives) {
                             switch (item.DispensibleDrug.Code) {
                                 case "62756018488":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues("30", "90", "C64933");
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
                                     break;
                             }
                         }
@@ -91,7 +91,7 @@ namespace BenMedica.Api.Processor {
 
                             switch (item.DispensibleDrug.Code) {
                                 case "65862005090":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues("30", "30", "C64933");
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
 
                                 case "00000000001":
@@ -116,7 +116,7 @@ namespace BenMedica.Api.Processor {
             });
         }
 
-        private Tuple<string, string, string> AssignValues(string v1, string v2, string v3) {
+        private Tuple<int, int, string> AssignValues(int v1, int v2, string v3) {
             return Tuple.Create(v1, v2, v3);
         }
 
@@ -125,30 +125,30 @@ namespace BenMedica.Api.Processor {
 
                 case "72931001202":
                     Source request = dispenseCodes.Source;
-                    (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues("30", "30", "C64933");
+                    (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
                 case "00093005301":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues("15", "30", "C64933");
+                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(15, 30, "C64933");
                     break;
                 case "00069541066":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues("30", "90", "C64933");
+                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
                     dispenseCodes.Source.ErrorOccurred = true;
                     dispenseCodes.Source.Errors = FillErrorArray("*E50C", "Unsupported value: QuantityUnitOfMeasure has been sunset");
                     break;
                 case "00071221420":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues("30", "240", "C28254");
+                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 240, "C28254");
                     dispenseCodes.Source.ErrorOccurred = true;
                     dispenseCodes.Source.Errors = FillErrorArray("*E50D", "Unsupported value: QuantityUnitOfMeasure does not match drug database");
 
                     break;
 
                 case "68462019505":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues("30", "30", "C64933");
+                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
             }
         }
         private void ValidateRequestObject(DispenseCodes dispenseCodes) {
-            if (dispenseCodes.Source.Quantity == null || dispenseCodes.Source.QuantityUnitOfMeasure == null || dispenseCodes.Source.QuantityUnitOfMeasure == null) {
+            if (dispenseCodes.Source.Quantity == null || dispenseCodes.Source.DaysSupply == null || dispenseCodes.Source.QuantityUnitOfMeasure == null) {
                 dispenseCodes.Source.ErrorOccurred = true;
                 List<Error> errors = new List<Error>();
                 if (dispenseCodes.Source.DaysSupply == null) {
@@ -191,7 +191,7 @@ namespace BenMedica.Api.Processor {
 
 
             dispenseCodes.ErrorOccurred = true;
-            dispenseCodes.Errors = FillErrorArray("*E50A", "Missing required property: Request");
+            dispenseCodes.Errors = FillErrorArray("*E50A", "Missing required object: Source");
             dispenseCodes.Alternatives = new List<Source>();
             return JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
                 //NullValueHandling = NullValueHandling.Ignore
