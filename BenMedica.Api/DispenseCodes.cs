@@ -6,6 +6,8 @@ using System.Reflection;
 
 namespace BenMedica.Api {
     public class DispenseCodes {
+        
+        
         public string TransactionId { get; set; }
 
         public string PayerId { get; set; }
@@ -14,7 +16,8 @@ namespace BenMedica.Api {
 
         public Guid RequestId => Guid.NewGuid();
 
-        public String RequestTime => DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt", CultureInfo.CreateSpecificCulture("en-US"));
+        public String RequestTime => DateTimeOffset.Now.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz");
+        //DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt", CultureInfo.CreateSpecificCulture("en-US"));
 
         public string ApiVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
 

@@ -108,6 +108,37 @@ namespace BenMedica.Api.Processor {
                         }
                     }
                     break;
+                case "00093720198":
+                    ValidateRequestObject(dispenseCodes);
+                    PopulateRequestDrugBasedOnCode(dispenseCodes);
+                    if (dispenseCodes.Alternatives.Count > 0) {
+
+                        foreach (var item in dispenseCodes.Alternatives) {
+
+                            switch (item.DispensibleDrug.Code) {
+                                case "68180047802":
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    break;
+
+                                case "60505257809":
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    break;
+
+                                case "00093744301":
+                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    break;
+                            }
+
+                        }
+                    }
+                    break;
+
+                default:
+                
+                    dispenseCodes.Source.ErrorOccurred = true;
+                    dispenseCodes.Source.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                    dispenseCodes.Alternatives = new List<Source>();
+                    break;
             }
 
             dispenseCodes.Alternatives = dispenseCodes.Alternatives?.OrderBy(x => x.DispensibleDrug.Code).ToList();
@@ -145,6 +176,11 @@ namespace BenMedica.Api.Processor {
                 case "68462019505":
                     (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
+
+                case "00093720198":
+                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                    break;
+               
             }
         }
         private void ValidateRequestObject(DispenseCodes dispenseCodes) {
