@@ -14,10 +14,6 @@ namespace BenMedica.Api.Controllers {
     [ApiController]
     [Route("api/[controller]")]
     public class DrugController : ControllerBase {
-        private static readonly string[] Description = new[]
-        {
-            "RF1234", "RF1235", "RF1236", "RF1237", "RF1238", "RF1239", "RF1240", "RF1241", "RF1242", "RF1243"
-        };
 
         private readonly ILogger<DrugController> _logger;
 
@@ -26,7 +22,7 @@ namespace BenMedica.Api.Controllers {
         }
 
         /// <summary>
-        ///  fetch the Infomation for main and it's alterntives drug
+        ///  fetch the information for main and its alternatives drug
         /// </summary>
         /// <param name="dispenseCodes"></param>
         /// <returns></returns>
@@ -44,64 +40,11 @@ namespace BenMedica.Api.Controllers {
                 } else {
                     return Ok(requestProcessor.ProcessRequest(dispenseCodes));
                 }
-
-
-
-
-                /* switch (dispenseCodes.Request.DispensibleDrug.Code) {
-
-                     case "72931001202":
-                         if(dispenseCodes.Request.)
-
-                         var pipeSeparatedAlternatives = string.Join("|", dispenseCodes.Alternatives?.Select(x => x.DispensibleDrug.Code));
-                         Random random = new Random();
-
-                         switch (pipeSeparatedAlternatives) {
-                             case "00071015545|00071015530|00071015515":
-                                 string[] codes = pipeSeparatedAlternatives.Split("|");
-                                 int index = random.Next(codes.Count());
-
-                                 foreach (var alterntive in codes) {
-                                     if (alterntive == codes[index] && requestedDrugxCodeFound) {
-                                         var alternativeDrug = dispenseCodes.Alternatives.Where(x => x.DispensibleDrug.Code == alterntive).FirstOrDefault();
-                                         alternativeDrug.DaysSupply = 21;
-                                         alternativeDrug.Quantity = "32";
-                                         alternativeDrug.ErrorOccurred = true;
-                                         alternativeDrug.ErrorCode = "E00A";
-                                         alternativeDrug.ErrorDescription = "Unknown DispensibleDrug.Code";
-                                     } else {
-                                         var alternativeDrug = dispenseCodes.Alternatives.Where(x => x.DispensibleDrug.Code == alterntive).FirstOrDefault();
-                                         alternativeDrug.DaysSupply = 21;
-                                         alternativeDrug.Quantity = "34.5";
-                                         alternativeDrug.ErrorOccurred = false;
-                                     }
-
-                                 }
-
-                                 break;
-                             default:
-                                 break;
-                         }
-                         break;
-                     default:
-                         break;
-                 }
-                */
-
-                //var response = JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
-                //    NullValueHandling = NullValueHandling.Ignore
-                //});
-
-                //return Ok(response);
             } catch (Exception) {
 
                 return this.StatusCode(StatusCodes.Status400BadRequest, "unable to  process the request");
             }
         }
 
-      
-
-
-
     }
-    }
+}

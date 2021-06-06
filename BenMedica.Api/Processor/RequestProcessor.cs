@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace BenMedica.Api.Processor {
     public class RequestProcessor {
@@ -32,6 +33,8 @@ namespace BenMedica.Api.Processor {
                                     break;
 
                                 default:
+                                    item.ErrorOccurred = true;
+                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
 
@@ -61,6 +64,8 @@ namespace BenMedica.Api.Processor {
                                     break;
 
                                 default:
+                                    item.ErrorOccurred = true;
+                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
                         }
@@ -75,6 +80,10 @@ namespace BenMedica.Api.Processor {
                             switch (item.DispensibleDrug.Code) {
                                 case "62756018488":
                                     (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
+                                    break;
+                                default:
+                                    item.ErrorOccurred = true;
+                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
                         }
@@ -103,6 +112,10 @@ namespace BenMedica.Api.Processor {
                                     item.ErrorOccurred = true;
                                     item.Errors = FillErrorArray("*E50F", "Unsupported value: DispensibleDrug.Code not available in SmartAlts");
                                     break;
+                                default:
+                                    item.ErrorOccurred = true;
+                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    break;
                             }
 
                         }
@@ -127,6 +140,10 @@ namespace BenMedica.Api.Processor {
                                 case "00093744301":
                                     (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
+                                default:
+                                    item.ErrorOccurred = true;
+                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    break;
                             }
 
                         }
@@ -144,6 +161,7 @@ namespace BenMedica.Api.Processor {
             dispenseCodes.Alternatives = dispenseCodes.Alternatives?.OrderBy(x => x.DispensibleDrug.Code).ToList();
             return JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
                 NullValueHandling = NullValueHandling.Ignore
+                //ContractResolver=new CamelCasePropertyNamesContractResolver()
             });
         }
 
@@ -219,7 +237,10 @@ namespace BenMedica.Api.Processor {
             dispenseCodes.Source = null;
 
             return JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
+                //ContractResolver = new CamelCasePropertyNamesContractResolver()
                 //NullValueHandling = NullValueHandling.Ignore
+               
+                //.AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null)
             });
         }
 
@@ -230,6 +251,7 @@ namespace BenMedica.Api.Processor {
             dispenseCodes.Errors = FillErrorArray("*E50A", "Missing required object: Source");
             dispenseCodes.Alternatives = new List<Source>();
             return JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
+                //ContractResolver = new CamelCasePropertyNamesContractResolver()
                 //NullValueHandling = NullValueHandling.Ignore
             });
         }

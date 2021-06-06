@@ -6,8 +6,6 @@ using System.Reflection;
 
 namespace BenMedica.Api {
     public class DispenseCodes {
-        
-        
         public string TransactionId { get; set; }
 
         public string PayerId { get; set; }
