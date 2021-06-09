@@ -13,7 +13,6 @@ namespace BenMedica.Api {
         public SmartAltsResponse() {
             SourceProductResponse = new SourceProductResponse();
             AlternativeProductResponses = new List<AlternativeProductResponse>();
-            // Errors = new List<Error>();
         }
 
         /// <summary>
@@ -43,7 +42,6 @@ namespace BenMedica.Api {
         [Required]
         public DateTimeOffset RequestTime => Convert.ToDateTime(DateTimeOffset.Now.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz"));
         //ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz");
-        //DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt", CultureInfo.CreateSpecificCulture("en-US"));
 
         /// <summary>
         /// Gets or sets the Api version
@@ -72,12 +70,6 @@ namespace BenMedica.Api {
         public List<AlternativeProductResponse> AlternativeProductResponses { get; set; }
 
     }
-    //public class DispensableProduct {
-    //    public string Code { get; set; }
-
-    //    public string Qualifier { get; set; }
-
-    //}
 
     /// <summary>
     /// The SourceProductResponse
@@ -120,7 +112,6 @@ namespace BenMedica.Api {
 
         public SourceProductResponse() {
             DispensableProduct = new DispensableProduct();
-           // Errors = new List<Error>();
         }
         
     }
@@ -166,10 +157,8 @@ namespace BenMedica.Api {
 
         public AlternativeProductResponse() {
             DispensableProduct = new DispensableProduct();
-            //Errors = new List<Error>();
         }
     }
-
 
     /// <summary>
     /// The Error
@@ -216,8 +205,7 @@ namespace BenMedica.Api {
         /// </summary>
         [Required]
         public DateTimeOffset RequestTime => Convert.ToDateTime(DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz"));
-        //DateTime.Now.ToString("MM/dd/yyyy hh:mm:ss tt", CultureInfo.CreateSpecificCulture("en-US"));
-
+      
         /// <summary>
         /// Gets or sets the api version
         /// </summary>

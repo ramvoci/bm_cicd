@@ -10,11 +10,10 @@ namespace BenMedica.Api.Processor {
     public class RequestProcessor {
 
         private SmartAltsResponse smartAltsResponse;
-       public RequestProcessor(SmartAltsResponse AltsResponse) {
+        public RequestProcessor(SmartAltsResponse AltsResponse) {
             smartAltsResponse = AltsResponse;
         }
         public string ProcessRequest(SmartAltsRequest smartAltsRequest) {
-
 
             switch (smartAltsRequest.SourceProductRequest.DispensableProduct.Code) {
 
@@ -35,16 +34,7 @@ namespace BenMedica.Api.Processor {
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
-                                        //AssignValues(30, 30, "C64933");
-                                    //alternativeProductRespon
-
-                                    //smartAltsResponse.AlternativeProductResponses.Add(new AlternativeProductResponse {
-                                    //    DispensableProductDescription= item.DispensableProductDescription,
-                                    //    DispensableProduct= item.DispensableProduct,
-
-                                    //(DaysSupply, Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
-                          //  });
-                            break;
+                                    break;
 
                                 case "00078037905":
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
@@ -56,13 +46,11 @@ namespace BenMedica.Api.Processor {
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     alternativeProductResponse.ErrorOccurred = true;
-                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensableProduct.Code not found drug database");
                                     break;
                             }
                             smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
                         }
-                        //var pipeSeparatedAlternatives = string.Join("|", dispenseCodes.Alternatives?.Select(x => x.DispensibleDrug.Code));
-                        //ProcessForAlterntives(pipeSeparatedAlternatives);
                     }
                     break;
 
@@ -96,7 +84,7 @@ namespace BenMedica.Api.Processor {
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     alternativeProductResponse.ErrorOccurred = true;
-                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensableProduct.Code not found drug database");
                                     break;
                             }
                             smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
@@ -121,7 +109,7 @@ namespace BenMedica.Api.Processor {
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     alternativeProductResponse.ErrorOccurred = true;
-                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensableProduct.Code not found drug database");
                                     break;
                             }
                             smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
@@ -148,20 +136,20 @@ namespace BenMedica.Api.Processor {
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     alternativeProductResponse.ErrorOccurred = true;
-                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensableProduct.Code not found drug database");
                                     break;
 
                                 case "65862042005":
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     alternativeProductResponse.ErrorOccurred = true;
-                                    alternativeProductResponse.Errors = FillErrorArray("*E50F", "Unsupported value: DispensibleDrug.Code not available in SmartAlts");
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50F", "Unsupported value: DispensableProduct.Code not available in SmartAlts");
                                     break;
                                 default:
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     alternativeProductResponse.ErrorOccurred = true;
-                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensableProduct.Code not found drug database");
                                     break;
                             }
                             smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
@@ -198,7 +186,7 @@ namespace BenMedica.Api.Processor {
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
                                     alternativeProductResponse.ErrorOccurred = true;
-                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensableProduct.Code not found drug database");
                                     break;
                             }
                             smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
@@ -207,27 +195,24 @@ namespace BenMedica.Api.Processor {
                     break;
 
                 default:
-                    //smartAltsResponse.AlternativeProductResponses =
                     smartAltsResponse.TransactionId = smartAltsRequest.TransactionId;
                     smartAltsResponse.PayerId = smartAltsRequest.PayerId;
                     smartAltsResponse.DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode;
                     smartAltsResponse.SourceProductResponse.DispensableProductDescription = smartAltsRequest.SourceProductRequest.DispensableProductDescription;
                     smartAltsResponse.SourceProductResponse.DispensableProduct = smartAltsRequest.SourceProductRequest.DispensableProduct;
                     smartAltsResponse.SourceProductResponse.ErrorOccurred = true;
-                    smartAltsResponse.SourceProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
-                    smartAltsResponse.AlternativeProductResponses =  new List<AlternativeProductResponse>();
+                    smartAltsResponse.SourceProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensableProduct.Code not found drug database");
+                    smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
                     break;
             }
 
-            smartAltsResponse.AlternativeProductResponses= smartAltsResponse.AlternativeProductResponses?.OrderBy(x => x.DispensableProduct.Code).ToList();
-            // alternativeProductResponse. = dispenseCodes.Alternatives?.OrderBy(x => x.DispensibleDrug.Code).ToList();
+            smartAltsResponse.AlternativeProductResponses = smartAltsResponse.AlternativeProductResponses?.OrderBy(x => x.DispensableProduct.Code).ToList();
             return JsonConvert.SerializeObject(smartAltsResponse, Formatting.Indented, new JsonSerializerSettings {
                 NullValueHandling = NullValueHandling.Ignore
-                //ContractResolver=new CamelCasePropertyNamesContractResolver()
             });
         }
 
-        
+
         private Tuple<int, double, string> AssignValues(int v1, double v2, string v3) {
             return Tuple.Create(v1, v2, v3);
         }
@@ -240,10 +225,10 @@ namespace BenMedica.Api.Processor {
             smartAltsResponse.SourceProductResponse.DispensableProduct = smartAltsRequest.SourceProductRequest.DispensableProduct;
             SourceProductResponse request = smartAltsResponse.SourceProductResponse;
             switch (smartAltsRequest.SourceProductRequest.DispensableProduct.Code) {
-                
+
 
                 case "72931001202":
-                    
+
                     (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
                 case "00093005301":
@@ -268,7 +253,7 @@ namespace BenMedica.Api.Processor {
                 case "00093720198":
                     (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
-               
+
             }
         }
         private void ValidateRequestObject(SmartAltsRequest smartAltsRequest) {
@@ -303,7 +288,7 @@ namespace BenMedica.Api.Processor {
             }
         }
 
-       
+
         public string GenerateErrorResponse(ModelStateDictionary modelState, SmartAltsRequest smartAltsRequest) {
             List<Error> errors = new List<Error>();
             foreach (var item in modelState.Keys) {
@@ -313,12 +298,12 @@ namespace BenMedica.Api.Processor {
                         ErrorDescription = "Missing required property: PayerId"
                     });
                 }
-                if(item == "SourceProductRequest") {
+                if (item == "SourceProductRequest") {
                     errors.Add(new Error {
                         ErrorCode = "*E50A",
                         ErrorDescription = "Missing required object: SourceProductRequest"
                     });
-                  }
+                }
             }
             return JsonConvert.SerializeObject(
                         new HttpClientErrorResponse {
@@ -327,38 +312,12 @@ namespace BenMedica.Api.Processor {
                             DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode,
                             ErrorOccurred = true,
                             Errors = errors
-                         
-                    }, Formatting.Indented, new JsonSerializerSettings {
-                        NullValueHandling = NullValueHandling.Ignore
-                    });
+
+                        }, Formatting.Indented, new JsonSerializerSettings {
+                            NullValueHandling = NullValueHandling.Ignore
+                        });
 
         }
-
-
-        //public string CheckRequestId(SmartAltsRequest smartAltsRequest) {
-        //   return JsonConvert.SerializeObject(new List<HttpClientErrorResponse> {
-        //                new HttpClientErrorResponse {
-        //                    TransactionId = smartAltsRequest.TransactionId,
-        //                    PayerId = smartAltsRequest.PayerId,
-        //                    DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode,
-        //                    ErrorOccurred = true,
-        //                    Errors = FillErrorArray("*E50A", "Missing required object: SourceProductRequest")
-        //                 }
-        //            }, Formatting.Indented, new JsonSerializerSettings {
-        //                NullValueHandling = NullValueHandling.Ignore
-        //            });
-
-        //    //smartAltsResponse.TransactionId = smartAltsRequest.TransactionId;
-        //    //smartAltsResponse.PayerId = smartAltsRequest.PayerId;
-        //    //smartAltsResponse.DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode;
-        //    //smartAltsResponse.ErrorOccurred = true;
-        //    //smartAltsResponse.Errors = FillErrorArray("*E50A", "Missing required object: SourceProductRequest");
-        //    //smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
-        //    //return JsonConvert.SerializeObject(smartAltsResponse, Formatting.Indented, new JsonSerializerSettings {
-        //        //ContractResolver = new CamelCasePropertyNamesContractResolver()
-        //        //NullValueHandling = NullValueHandling.Ignore
-        //    //});
-        //}
 
         private List<Error> FillErrorArray(string errorCode, string errorDescription) {
             return new List<Error> {
