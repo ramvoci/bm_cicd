@@ -2,42 +2,64 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
 namespace BenMedica.Api.Processor {
     public class RequestProcessor {
 
-        public string ProcessRequest(DispenseCodes dispenseCodes) {
+        private SmartAltsResponse smartAltsResponse;
+       public RequestProcessor(SmartAltsResponse AltsResponse) {
+            smartAltsResponse = AltsResponse;
+        }
+        public string ProcessRequest(SmartAltsRequest smartAltsRequest) {
 
 
-            switch (dispenseCodes.Source.DispensibleDrug.Code) {
+            switch (smartAltsRequest.SourceProductRequest.DispensableProduct.Code) {
 
                 case "72931001202":
                     //checkforErrors
-                    ValidateRequestObject(dispenseCodes);
+                    ValidateRequestObject(smartAltsRequest);
 
                     // fill quantity
-                    PopulateRequestDrugBasedOnCode(dispenseCodes);
+                    PopulateRequestDrugBasedOnCode(smartAltsRequest);
 
                     // process alternatives if any
-                    if (dispenseCodes.Alternatives.Count > 0) {
-                        foreach (var item in dispenseCodes.Alternatives) {
-                            switch (item.DispensibleDrug.Code) {
+                    if (smartAltsRequest.AlternativeProductRequests.Count > 0) {
+                        smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
+                        foreach (var item in smartAltsRequest.AlternativeProductRequests) {
+                            AlternativeProductResponse alternativeProductResponse = new AlternativeProductResponse();
+                            switch (item.DispensableProduct.Code) {
                                 case "00074329013":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
-                                    break;
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                        //AssignValues(30, 30, "C64933");
+                                    //alternativeProductRespon
+
+                                    //smartAltsResponse.AlternativeProductResponses.Add(new AlternativeProductResponse {
+                                    //    DispensableProductDescription= item.DispensableProductDescription,
+                                    //    DispensableProduct= item.DispensableProduct,
+
+                                    //(DaysSupply, Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                          //  });
+                            break;
 
                                 case "00078037905":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
 
                                 default:
-                                    item.ErrorOccurred = true;
-                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    alternativeProductResponse.ErrorOccurred = true;
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
-
+                            smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
                         }
                         //var pipeSeparatedAlternatives = string.Join("|", dispenseCodes.Alternatives?.Select(x => x.DispensibleDrug.Code));
                         //ProcessForAlterntives(pipeSeparatedAlternatives);
@@ -45,216 +67,298 @@ namespace BenMedica.Api.Processor {
                     break;
 
                 case "00093005301":
-                    ValidateRequestObject(dispenseCodes);
-                    PopulateRequestDrugBasedOnCode(dispenseCodes);
+                    ValidateRequestObject(smartAltsRequest);
+                    PopulateRequestDrugBasedOnCode(smartAltsRequest);
                     break;
 
                 case "00069541066":
-                    ValidateRequestObject(dispenseCodes);
-                    PopulateRequestDrugBasedOnCode(dispenseCodes);
-                    if (dispenseCodes.Alternatives.Count > 0) {
-                        foreach (var item in dispenseCodes.Alternatives) {
-                            switch (item.DispensibleDrug.Code) {
+                    ValidateRequestObject(smartAltsRequest);
+                    PopulateRequestDrugBasedOnCode(smartAltsRequest);
+
+                    if (smartAltsRequest.AlternativeProductRequests.Count > 0) {
+                        smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
+                        foreach (var item in smartAltsRequest.AlternativeProductRequests) {
+                            AlternativeProductResponse alternativeProductResponse = new AlternativeProductResponse();
+                            switch (item.DispensableProduct.Code) {
                                 case "23155050101":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
                                     break;
 
                                 case "00185067401":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
                                     break;
 
                                 default:
-                                    item.ErrorOccurred = true;
-                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    alternativeProductResponse.ErrorOccurred = true;
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
+                            smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
                         }
                     }
                     break;
 
                 case "00071221420":
-                    ValidateRequestObject(dispenseCodes);
-                    PopulateRequestDrugBasedOnCode(dispenseCodes);
-                    if (dispenseCodes.Alternatives.Count > 0) {
-                        foreach (var item in dispenseCodes.Alternatives) {
-                            switch (item.DispensibleDrug.Code) {
+                    ValidateRequestObject(smartAltsRequest);
+                    PopulateRequestDrugBasedOnCode(smartAltsRequest);
+                    if (smartAltsRequest.AlternativeProductRequests.Count > 0) {
+                        smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
+                        foreach (var item in smartAltsRequest.AlternativeProductRequests) {
+                            AlternativeProductResponse alternativeProductResponse = new AlternativeProductResponse();
+                            switch (item.DispensableProduct.Code) {
                                 case "62756018488":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
                                     break;
                                 default:
-                                    item.ErrorOccurred = true;
-                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    alternativeProductResponse.ErrorOccurred = true;
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
+                            smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
                         }
                     }
                     break;
 
                 case "68462019505":
-                    ValidateRequestObject(dispenseCodes);
-                    PopulateRequestDrugBasedOnCode(dispenseCodes);
+                    ValidateRequestObject(smartAltsRequest);
+                    PopulateRequestDrugBasedOnCode(smartAltsRequest);
 
-                    if (dispenseCodes.Alternatives.Count > 0) {
-
-                        foreach (var item in dispenseCodes.Alternatives) {
-
-                            switch (item.DispensibleDrug.Code) {
+                    if (smartAltsRequest.AlternativeProductRequests.Count > 0) {
+                        smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
+                        foreach (var item in smartAltsRequest.AlternativeProductRequests) {
+                            AlternativeProductResponse alternativeProductResponse = new AlternativeProductResponse();
+                            switch (item.DispensableProduct.Code) {
                                 case "65862005090":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
 
                                 case "00000000001":
-                                    item.ErrorOccurred = true;
-                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    alternativeProductResponse.ErrorOccurred = true;
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
 
                                 case "65862042005":
-                                    item.ErrorOccurred = true;
-                                    item.Errors = FillErrorArray("*E50F", "Unsupported value: DispensibleDrug.Code not available in SmartAlts");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    alternativeProductResponse.ErrorOccurred = true;
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50F", "Unsupported value: DispensibleDrug.Code not available in SmartAlts");
                                     break;
                                 default:
-                                    item.ErrorOccurred = true;
-                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    alternativeProductResponse.ErrorOccurred = true;
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
-
+                            smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
                         }
                     }
                     break;
                 case "00093720198":
-                    ValidateRequestObject(dispenseCodes);
-                    PopulateRequestDrugBasedOnCode(dispenseCodes);
-                    if (dispenseCodes.Alternatives.Count > 0) {
+                    ValidateRequestObject(smartAltsRequest);
+                    PopulateRequestDrugBasedOnCode(smartAltsRequest);
+                    if (smartAltsRequest.AlternativeProductRequests.Count > 0) {
+                        smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
+                        foreach (var item in smartAltsRequest.AlternativeProductRequests) {
+                            AlternativeProductResponse alternativeProductResponse = new AlternativeProductResponse();
+                            switch (item.DispensableProduct.Code) {
 
-                        foreach (var item in dispenseCodes.Alternatives) {
-
-                            switch (item.DispensibleDrug.Code) {
                                 case "68180047802":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
 
                                 case "60505257809":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
 
                                 case "00093744301":
-                                    (item.DaysSupply, item.Quantity, item.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                                     break;
                                 default:
-                                    item.ErrorOccurred = true;
-                                    item.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                                    alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
+                                    alternativeProductResponse.DispensableProduct = item.DispensableProduct;
+                                    alternativeProductResponse.ErrorOccurred = true;
+                                    alternativeProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
                                     break;
                             }
-
+                            smartAltsResponse.AlternativeProductResponses.Add(alternativeProductResponse);
                         }
                     }
                     break;
 
                 default:
-                
-                    dispenseCodes.Source.ErrorOccurred = true;
-                    dispenseCodes.Source.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
-                    dispenseCodes.Alternatives = new List<Source>();
+                    //smartAltsResponse.AlternativeProductResponses =
+                    smartAltsResponse.TransactionId = smartAltsRequest.TransactionId;
+                    smartAltsResponse.PayerId = smartAltsRequest.PayerId;
+                    smartAltsResponse.DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode;
+                    smartAltsResponse.SourceProductResponse.DispensableProductDescription = smartAltsRequest.SourceProductRequest.DispensableProductDescription;
+                    smartAltsResponse.SourceProductResponse.DispensableProduct = smartAltsRequest.SourceProductRequest.DispensableProduct;
+                    smartAltsResponse.SourceProductResponse.ErrorOccurred = true;
+                    smartAltsResponse.SourceProductResponse.Errors = FillErrorArray("*E50E", "Unsupported value: DispensibleDrug.Code not found drug database");
+                    smartAltsResponse.AlternativeProductResponses =  new List<AlternativeProductResponse>();
                     break;
             }
 
-            dispenseCodes.Alternatives = dispenseCodes.Alternatives?.OrderBy(x => x.DispensibleDrug.Code).ToList();
-            return JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
+            smartAltsResponse.AlternativeProductResponses= smartAltsResponse.AlternativeProductResponses?.OrderBy(x => x.DispensableProduct.Code).ToList();
+            // alternativeProductResponse. = dispenseCodes.Alternatives?.OrderBy(x => x.DispensibleDrug.Code).ToList();
+            return JsonConvert.SerializeObject(smartAltsResponse, Formatting.Indented, new JsonSerializerSettings {
                 NullValueHandling = NullValueHandling.Ignore
                 //ContractResolver=new CamelCasePropertyNamesContractResolver()
             });
         }
 
-        private Tuple<int, int, string> AssignValues(int v1, int v2, string v3) {
+        
+        private Tuple<int, double, string> AssignValues(int v1, double v2, string v3) {
             return Tuple.Create(v1, v2, v3);
         }
 
-        private void PopulateRequestDrugBasedOnCode(DispenseCodes dispenseCodes) {
-            switch (dispenseCodes.Source.DispensibleDrug.Code) {
+        private void PopulateRequestDrugBasedOnCode(SmartAltsRequest smartAltsRequest) {
+            smartAltsResponse.TransactionId = smartAltsRequest.TransactionId;
+            smartAltsResponse.PayerId = smartAltsRequest.PayerId;
+            smartAltsResponse.DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode;
+            smartAltsResponse.SourceProductResponse.DispensableProductDescription = smartAltsRequest.SourceProductRequest.DispensableProductDescription;
+            smartAltsResponse.SourceProductResponse.DispensableProduct = smartAltsRequest.SourceProductRequest.DispensableProduct;
+            SourceProductResponse request = smartAltsResponse.SourceProductResponse;
+            switch (smartAltsRequest.SourceProductRequest.DispensableProduct.Code) {
+                
 
                 case "72931001202":
-                    Source request = dispenseCodes.Source;
+                    
                     (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
                 case "00093005301":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(15, 30, "C64933");
+                    (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(15, 30, "C64933");
                     break;
                 case "00069541066":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
-                    dispenseCodes.Source.ErrorOccurred = true;
-                    dispenseCodes.Source.Errors = FillErrorArray("*E50C", "Unsupported value: QuantityUnitOfMeasure has been sunset");
+                    (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 90, "C64933");
+                    request.ErrorOccurred = true;
+                    request.Errors = FillErrorArray("*E50C", "Unsupported value: QuantityUnitOfMeasure has been sunset");
                     break;
                 case "00071221420":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 240, "C28254");
-                    dispenseCodes.Source.ErrorOccurred = true;
-                    dispenseCodes.Source.Errors = FillErrorArray("*E50D", "Unsupported value: QuantityUnitOfMeasure does not match drug database");
+                    (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 240, "C28254");
+                    request.ErrorOccurred = true;
+                    request.Errors = FillErrorArray("*E50D", "Unsupported value: QuantityUnitOfMeasure does not match drug database");
 
                     break;
 
                 case "68462019505":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                    (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
 
                 case "00093720198":
-                    (dispenseCodes.Source.DaysSupply, dispenseCodes.Source.Quantity, dispenseCodes.Source.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                    (request.DaysSupply, request.Quantity, request.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
                     break;
                
             }
         }
-        private void ValidateRequestObject(DispenseCodes dispenseCodes) {
-            if (dispenseCodes.Source.Quantity == null || dispenseCodes.Source.DaysSupply == null || dispenseCodes.Source.QuantityUnitOfMeasure == null) {
-                dispenseCodes.Source.ErrorOccurred = true;
+        private void ValidateRequestObject(SmartAltsRequest smartAltsRequest) {
+            smartAltsResponse.TransactionId = smartAltsRequest.TransactionId;
+            smartAltsResponse.PayerId = null;
+            smartAltsResponse.DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode;
+
+            if (smartAltsRequest.SourceProductRequest.Quantity == null || smartAltsRequest.SourceProductRequest.DaysSupply == null || smartAltsRequest.SourceProductRequest.QuantityUnitOfMeasure == null) {
+                smartAltsResponse.SourceProductResponse.ErrorOccurred = true;
                 List<Error> errors = new List<Error>();
-                if (dispenseCodes.Source.DaysSupply == null) {
+                if (smartAltsRequest.SourceProductRequest.DaysSupply == null) {
                     errors.Add(new Error {
                         ErrorCode = "*E00B",
                         ErrorDescription = "Missing required property: DaysSupply"
                     });
                 };
 
-                if (dispenseCodes.Source.Quantity == null) {
+                if (smartAltsRequest.SourceProductRequest.Quantity == null) {
                     errors.Add(new Error {
                         ErrorCode = "*E00C",
                         ErrorDescription = "Missing required property: Quantity"
                     });
                 };
 
-                if (dispenseCodes.Source.QuantityUnitOfMeasure == null) {
+                if (smartAltsRequest.SourceProductRequest.QuantityUnitOfMeasure == null) {
                     errors.Add(new Error {
                         ErrorCode = "*E00D",
                         ErrorDescription = "Missing required property: QuantityUnitOfMeasure"
                     });
                 };
-                dispenseCodes.Source.Errors = errors;
+                smartAltsResponse.SourceProductResponse.Errors = errors;
             }
         }
 
-        public string CheckPayerId(DispenseCodes dispenseCodes) {
+       
+        public string GenerateErrorResponse(ModelStateDictionary modelState, SmartAltsRequest smartAltsRequest) {
+            List<Error> errors = new List<Error>();
+            foreach (var item in modelState.Keys) {
+                if (item == "PayerId") {
+                    errors.Add(new Error {
+                        ErrorCode = "*E50B",
+                        ErrorDescription = "Missing required property: PayerId"
+                    });
+                }
+                if(item == "SourceProductRequest") {
+                    errors.Add(new Error {
+                        ErrorCode = "*E50A",
+                        ErrorDescription = "Missing required object: SourceProductRequest"
+                    });
+                  }
+            }
+            return JsonConvert.SerializeObject(
+                        new HttpClientErrorResponse {
+                            TransactionId = smartAltsRequest.TransactionId,
+                            PayerId = smartAltsRequest.PayerId,
+                            DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode,
+                            ErrorOccurred = true,
+                            Errors = errors
+                         
+                    }, Formatting.Indented, new JsonSerializerSettings {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
 
-
-            dispenseCodes.ErrorOccurred = true;
-            dispenseCodes.Errors = FillErrorArray("*E50B", "Missing required property: PayerId");
-            dispenseCodes.Source = null;
-
-            return JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
-                //ContractResolver = new CamelCasePropertyNamesContractResolver()
-                //NullValueHandling = NullValueHandling.Ignore
-               
-                //.AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null)
-            });
         }
 
-        public string CheckRequestId(DispenseCodes dispenseCodes) {
 
+        //public string CheckRequestId(SmartAltsRequest smartAltsRequest) {
+        //   return JsonConvert.SerializeObject(new List<HttpClientErrorResponse> {
+        //                new HttpClientErrorResponse {
+        //                    TransactionId = smartAltsRequest.TransactionId,
+        //                    PayerId = smartAltsRequest.PayerId,
+        //                    DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode,
+        //                    ErrorOccurred = true,
+        //                    Errors = FillErrorArray("*E50A", "Missing required object: SourceProductRequest")
+        //                 }
+        //            }, Formatting.Indented, new JsonSerializerSettings {
+        //                NullValueHandling = NullValueHandling.Ignore
+        //            });
 
-            dispenseCodes.ErrorOccurred = true;
-            dispenseCodes.Errors = FillErrorArray("*E50A", "Missing required object: Source");
-            dispenseCodes.Alternatives = new List<Source>();
-            return JsonConvert.SerializeObject(dispenseCodes, Formatting.Indented, new JsonSerializerSettings {
-                //ContractResolver = new CamelCasePropertyNamesContractResolver()
-                //NullValueHandling = NullValueHandling.Ignore
-            });
-        }
+        //    //smartAltsResponse.TransactionId = smartAltsRequest.TransactionId;
+        //    //smartAltsResponse.PayerId = smartAltsRequest.PayerId;
+        //    //smartAltsResponse.DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode;
+        //    //smartAltsResponse.ErrorOccurred = true;
+        //    //smartAltsResponse.Errors = FillErrorArray("*E50A", "Missing required object: SourceProductRequest");
+        //    //smartAltsResponse.AlternativeProductResponses = new List<AlternativeProductResponse>();
+        //    //return JsonConvert.SerializeObject(smartAltsResponse, Formatting.Indented, new JsonSerializerSettings {
+        //        //ContractResolver = new CamelCasePropertyNamesContractResolver()
+        //        //NullValueHandling = NullValueHandling.Ignore
+        //    //});
+        //}
 
         private List<Error> FillErrorArray(string errorCode, string errorDescription) {
             return new List<Error> {

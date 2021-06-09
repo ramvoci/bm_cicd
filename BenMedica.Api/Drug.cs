@@ -1,4 +1,5 @@
 using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace BenMedica.Api
 {
@@ -10,5 +11,10 @@ namespace BenMedica.Api
 
         public string Description { get; set; }
        
+    }
+
+    internal class ErrorSchema : ProblemDetails {
+        public bool ErrorOccured { get; set; }
+        public string ErrorCode { get; set; }
     }
 }

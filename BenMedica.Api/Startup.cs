@@ -1,4 +1,5 @@
 using Azure.Storage.Blobs;
+using Hellang.Middleware.ProblemDetails;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,13 +35,64 @@ namespace BenMedica.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .AddNewtonsoftJson(options =>
-                {
-                    options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                .AddNewtonsoftJson(options => {
+                    //options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
-                });
-           var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                })
+            .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
+
+            services.AddMvc()
+        .ConfigureApiBehaviorOptions(options => {
+            options.SuppressModelStateInvalidFilter = true;
+        }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            //services.Configure<ApiBehaviorOptions>(options => {
+            //    options.InvalidModelStateResponseFactory = actionContext => {
+            //        var actionExecutingContext = actionContext as Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext;
+
+            //        if (actionContext.ModelState.ErrorCount > 0 && actionExecutingContext.ActionArguments.Count == actionContext.ActionDescriptor.Parameters.Count) {
+            //            return new BadRequestObjectResult(actionContext.ModelState);
+            //        }
+            //        return new BadRequestObjectResult(actionContext.ModelState);
+            //    };
+
+            //});
+
+
+            //services.Configure<ApiBehaviorOptions>(options =>
+            //{
+            //    options.InvalidModelStateResponseFactory = context =>
+            //    {
+            //        var problemDetails = new ValidationProblemDetails(context.ModelState);
+
+            //        var result = new BadRequestObjectResult(problemDetails);
+
+            //        result.ContentTypes.Add("application/problem+json");
+            //        result.ContentTypes.Add("application/problem+xml");
+
+            //        return result;
+            //    };
+            //});
+            //services.AddProblemDetails();
+
+            //services.AddProblemDetails(setup => {
+            //    //setup.IncludeExceptionDetails = _ => !Environment.IsDevelopment();
+            //    setup.Map<ErrorSchema>(exception => new ErrorSchema {
+            //        ErrorOccured = exception.ErrorOccured,
+            //        ErrorCode= exception.ErrorCode
+            //        //Title = exception.Message,
+            //        //Detail = exception.Description,
+            //        //Balance = exception.Balance,
+            //        //Status = StatusCodes.Status403Forbidden,
+            //        //Type = exception.Type
+            //    }) ;
+
+            services.AddTransient<SmartAltsResponse>();
+
+
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             services.AddSwaggerGen(c =>
             {
@@ -49,6 +101,9 @@ namespace BenMedica.Api
             });
             services.AddSingleton(x => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
             services.AddSingleton<IBlobService, BlobServices>();
+            //services.ConfigureApiBehaviorOptions(options => {
+            //    options.SuppressUseValidationProblemDetailsForInvalidModelStateResponses = false;
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -78,6 +133,8 @@ namespace BenMedica.Api
             {
                 endpoints.MapControllers();
             });
+
+            //app.UseProblemDetails();
         }
     }
 }

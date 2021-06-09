@@ -21,10 +21,7 @@ namespace BenMedica.Api.Controllers {
             _blobService = blobService;
         }
 
-        /// <summary>
-        /// Get the blob using filename
-        /// </summary>
-        /// <returns>get the blob content</returns>
+   
         //[HttpGet("{filename}")]
         //public async Task<IActionResult> Get(string filename) {
         //    try {
