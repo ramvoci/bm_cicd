@@ -37,11 +37,14 @@ namespace BenMedica.Api.Controllers {
             try {
                 RequestProcessor requestProcessor = new RequestProcessor(_smartAltsResponse);
 
-                if (!ModelState.IsValid) {
+                if (ModelState.Keys.Contains("PayerId") || ModelState.Keys.Contains("SourceProductRequest")) {
                     return BadRequest(requestProcessor.GenerateErrorResponse(ModelState, smartAltsRequest));
                 }
+               // if (!ModelState.IsValid) {
+                    
+                
               
-                else return Ok(requestProcessor.ProcessRequest(smartAltsRequest));
+              return Ok(requestProcessor.ProcessRequest(smartAltsRequest));
 
             } catch (Exception exception) {
                 return BadRequest(exception);

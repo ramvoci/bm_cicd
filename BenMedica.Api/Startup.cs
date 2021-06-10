@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using System;
@@ -26,6 +27,8 @@ namespace BenMedica.Api {
                 .AddNewtonsoftJson(options => {
                     options.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+                    options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Utc;
+                    options.SerializerSettings.DateFormatString = "MM/dd/yyyy HH:mm";
                 })
             .AddJsonOptions(opt => opt.JsonSerializerOptions.PropertyNamingPolicy = null);
 
@@ -41,7 +44,15 @@ namespace BenMedica.Api {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BenMedica.Api", Version = "v1" });
                 c.IncludeXmlComments(xmlPath);
                 c.MapType<decimal>(()=> new OpenApiSchema { Type="number", Format="decimal" });
+                //c.MapType<DateTime>(() => new OpenApiSchema {
+                //    Type = "string",
+                //    Format = "date-time",
+                //    Example = new OpenApiString(DateTime.UtcNow.ToString("o"))
+                //});
+                //c.UseAllOfToExtendReferenceSchemas();
+                //c.SchemaFilter<RequireValueTypePropertiesSchemaFilter>();
             });
+            //services.AddSwaggerGenNewtonsoftSupport();
             services.AddSingleton(x => new BlobServiceClient(Configuration.GetValue<string>("AzureBlobStorageConnectionString")));
             services.AddSingleton<IBlobService, BlobServices>();
         }

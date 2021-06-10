@@ -20,8 +20,6 @@ namespace BenMedica.Api.Processor {
                 case "72931001202":
                     //checkforErrors
                     ValidateRequestObject(smartAltsRequest);
-
-                    // fill quantity
                     PopulateRequestDrugBasedOnCode(smartAltsRequest);
 
                     // process alternatives if any
@@ -208,12 +206,14 @@ namespace BenMedica.Api.Processor {
 
             smartAltsResponse.AlternativeProductResponses = smartAltsResponse.AlternativeProductResponses?.OrderBy(x => x.DispensableProduct.Code).ToList();
             return JsonConvert.SerializeObject(smartAltsResponse, Formatting.Indented, new JsonSerializerSettings {
-                NullValueHandling = NullValueHandling.Ignore
-            });
+                NullValueHandling = NullValueHandling.Ignore,
+                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                DateFormatString = "o"
+        });
         }
 
 
-        private Tuple<int, double, string> AssignValues(int v1, double v2, string v3) {
+        private Tuple<int, decimal, string> AssignValues(int v1, decimal v2, string v3) {
             return Tuple.Create(v1, v2, v3);
         }
 
@@ -258,7 +258,7 @@ namespace BenMedica.Api.Processor {
         }
         private void ValidateRequestObject(SmartAltsRequest smartAltsRequest) {
             smartAltsResponse.TransactionId = smartAltsRequest.TransactionId;
-            smartAltsResponse.PayerId = null;
+            smartAltsResponse.PayerId = smartAltsRequest.PayerId;
             smartAltsResponse.DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode;
 
             if (smartAltsRequest.SourceProductRequest.Quantity == null || smartAltsRequest.SourceProductRequest.DaysSupply == null || smartAltsRequest.SourceProductRequest.QuantityUnitOfMeasure == null) {
@@ -309,12 +309,12 @@ namespace BenMedica.Api.Processor {
                         new HttpClientErrorResponse {
                             TransactionId = smartAltsRequest.TransactionId,
                             PayerId = smartAltsRequest.PayerId,
-                            DrugDatabaseSourceCode = smartAltsRequest.DrugDatabaseSourceCode,
-                            ErrorOccurred = true,
                             Errors = errors
 
                         }, Formatting.Indented, new JsonSerializerSettings {
-                            NullValueHandling = NullValueHandling.Ignore
+                            NullValueHandling = NullValueHandling.Ignore,
+                            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
+                            DateFormatString = "o"
                         });
 
         }

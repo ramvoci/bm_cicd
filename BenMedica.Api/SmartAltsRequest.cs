@@ -15,7 +15,6 @@ namespace BenMedica.Api {
         /// The Transaction Id
         /// </value>
         public string TransactionId { get; set; }
-
         /// <summary>
         /// Gets or sets the Payer id
         /// </summary>
@@ -36,6 +35,7 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the alternative product requests
         /// </summary>
+        //[JsonProperty(Required = Required.DisallowNull)]
         public List<AlternativeProductRequest> AlternativeProductRequests { get; set; }
 
     }
@@ -48,13 +48,13 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the code
         /// </summary>
-        //[Required]
+        [Required]
         public string Code { get; set; }
 
         /// <summary>
         /// Gets or sets the qualifier
         /// </summary>
-       // [Required]
+       [Required]
         public string Qualifier { get; set; }
 
     }
@@ -72,28 +72,28 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the dispensable product
         /// </summary>
-       // [Required]
+       [Required]
         public DispensableProduct DispensableProduct { get; set; }
 
 
         /// <summary>
         /// Gets or sets the DaysSupply
         /// </summary>
-        //[Required]
+        [Required]
         public int? DaysSupply { get; set; }
 
 
         /// <summary>
         /// Gets or sets the Quantity
         /// </summary>
-        //[Required]
+        [Required]
         public decimal? Quantity { get; set; }
 
 
         /// <summary>
         /// Gets or sets the QuantityUnitOfMeasure
         /// </summary>
-        //[Required]
+        [Required]
         public string QuantityUnitOfMeasure { get; set; }
 
     }
@@ -110,7 +110,7 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the dispensable product
         /// </summary>
-       // [Required]
+       [Required]
         public DispensableProduct DispensableProduct { get; set; }
     }
 

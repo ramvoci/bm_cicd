@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Reflection;
 
 namespace BenMedica.Api {
@@ -23,11 +24,13 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the Payer id
         /// </summary>
+        [Required]
         public string PayerId { get; set; }
 
         /// <summary>
         /// Gets or sets the database source code
         /// </summary>
+        [Required]
         public string DrugDatabaseSourceCode { get; set; }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace BenMedica.Api {
         /// Gets or sets the request time
         /// </summary>
         [Required]
-        public DateTimeOffset RequestTime => Convert.ToDateTime(DateTimeOffset.Now.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz"));
+        public DateTime RequestTime => DateTime.UtcNow;
         //ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz");
 
         /// <summary>
@@ -52,6 +55,7 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the ErrorOccurred
         /// </summary>
+        [Required]
         public bool ErrorOccurred { get; set; }
 
         /// <summary>
@@ -62,6 +66,7 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the source product response
         /// </summary>
+        [Required]
         public SourceProductResponse SourceProductResponse { get; set; }
 
         /// <summary>
@@ -88,12 +93,12 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the daysSupply
         /// </summary>
-        public int? DaysSupply { get; set; }
+        public int DaysSupply { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity
         /// </summary>
-        public double? Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity unit of measure
@@ -132,13 +137,13 @@ namespace BenMedica.Api {
 
         /// <summary>
         /// Gets or sets the days supply
-        /// </summary>
+        /// </summary> 
         public int? DaysSupply { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity
         /// </summary>
-        public double? Quantity { get; set; }
+        public decimal? Quantity { get; set; }
 
         /// <summary>
         /// Gets or sets the quantity unit of measure
@@ -148,6 +153,7 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the errorOccurred
         /// </summary>
+        [Required]
         public bool ErrorOccurred { get; set; }
 
         /// <summary>
@@ -167,10 +173,12 @@ namespace BenMedica.Api {
         /// <summary>
         /// Gets or sets the error code
         /// </summary>
+        [Required]
         public string ErrorCode { get; set; }
         /// <summary>
         /// Gets or sets the error description
         /// </summary>
+        [Required]
         public string ErrorDescription { get; set; }
     }
 
@@ -196,27 +204,16 @@ namespace BenMedica.Api {
         public Guid RequestId => Guid.NewGuid();
 
         /// <summary>
-        /// Gets or sets the drug database source code
-        /// </summary>
-        public string DrugDatabaseSourceCode { get; set; }
-
-        /// <summary>
         /// Gets or sets the request time
         /// </summary>
         [Required]
-        public DateTimeOffset RequestTime => Convert.ToDateTime(DateTimeOffset.UtcNow.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz"));
-      
+        public DateTime RequestTime => DateTime.UtcNow;
+
         /// <summary>
         /// Gets or sets the api version
         /// </summary>
         [Required]
         public string ApiVersion => Assembly.GetEntryAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
-
-        /// <summary>
-        /// Gets or sets the error occured
-        /// </summary>
-        [Required]
-        public bool ErrorOccurred { get; set; }
 
         /// <summary>
         /// Gets or sets the errors
