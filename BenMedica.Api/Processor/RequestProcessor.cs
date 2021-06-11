@@ -209,9 +209,20 @@ namespace BenMedica.Api.Processor {
                 NullValueHandling = NullValueHandling.Ignore,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc,
                 DateFormatString = "o"
-        });
+            });
         }
 
+        public bool IsSourceProductRequestCodeFoundInDatabase(SmartAltsRequest smartAltsRequest) {
+
+            List<string> codes = new List<string> {
+                "72931001202","00093005301","00069541066","00071221420","68462019505","00093720198"
+            };
+            return codes.Any(x => x == smartAltsRequest?.SourceProductRequest?.DispensableProduct?.Code);
+        }
+
+        internal ModelStateDictionary GenerateErrorResponseWhenCodeNotFound(ModelStateDictionary modelState, SmartAltsRequest smartAltsRequest) {
+            throw new NotImplementedException();
+        }
 
         private Tuple<int, decimal, string> AssignValues(int v1, decimal v2, string v3) {
             return Tuple.Create(v1, v2, v3);
@@ -289,7 +300,7 @@ namespace BenMedica.Api.Processor {
         }
 
 
-        public string GenerateErrorResponse(ModelStateDictionary modelState, SmartAltsRequest smartAltsRequest) {
+        public string GenerateErrorResponse(ModelStateDictionary modelState, SmartAltsRequest smartAltsRequest, bool isSourceProductRequestCodeFound) {
             List<Error> errors = new List<Error>();
             foreach (var item in modelState.Keys) {
                 if (item == "PayerId") {
@@ -304,6 +315,13 @@ namespace BenMedica.Api.Processor {
                         ErrorDescription = "Missing required object: SourceProductRequest"
                     });
                 }
+
+            }
+            if (isSourceProductRequestCodeFound && smartAltsRequest.SourceProductRequest != null && smartAltsRequest.PayerId != null) {
+                errors.Add(new Error {
+                    ErrorCode = "*E999",
+                    ErrorDescription = "Invalid Request: InvalidOperationException"
+                });
             }
             return JsonConvert.SerializeObject(
                         new HttpClientErrorResponse {

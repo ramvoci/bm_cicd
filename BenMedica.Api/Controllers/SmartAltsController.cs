@@ -2,12 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
 
 
 namespace BenMedica.Api.Controllers {
@@ -25,7 +21,7 @@ namespace BenMedica.Api.Controllers {
         /// <summary>
         /// Request SmartAlts DaysSupply, Quantity, QuantityUnitOfMeasure information for a SourceProduct and a list of AlternativeProducts.
         /// </summary>
-        /// <param name="smartAltsRequest"></param>
+        /// <param name="smartAltsRequest">Supplies the SmartAltsRequest</param>
         /// <returns> SmartAltsResponse</returns>
         /// <response code = "200">Returns the SmartAltsResponse</response>
         /// <response code = "400">Returns the HttpClientErrorResponse</response>
@@ -36,11 +32,14 @@ namespace BenMedica.Api.Controllers {
 
             try {
                 RequestProcessor requestProcessor = new RequestProcessor(_smartAltsResponse);
+                bool isSourceProductRequestCodeFound = !requestProcessor.IsSourceProductRequestCodeFoundInDatabase(smartAltsRequest);
 
-                if (ModelState.Keys.Contains("PayerId") || ModelState.Keys.Contains("SourceProductRequest")) {
-                    return BadRequest(requestProcessor.GenerateErrorResponse(ModelState, smartAltsRequest));
-                }
-                    
+                if ((ModelState.Keys.Contains("PayerId") || ModelState.Keys.Contains("SourceProductRequest")) || (isSourceProductRequestCodeFound))
+                    return BadRequest(requestProcessor.GenerateErrorResponse(ModelState, smartAltsRequest, isSourceProductRequestCodeFound));
+
+                //if (!requestProcessor.IsSourceProductRequestCodeFoundInDatabase(smartAltsRequest))
+                //    return BadRequest(requestProcessor.GenerateErrorResponse(ModelState, smartAltsRequest));
+
                 return Ok(requestProcessor.ProcessRequest(smartAltsRequest));
 
             } catch (Exception exception) {

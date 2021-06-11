@@ -70,7 +70,7 @@ namespace BenMedica.Api {
         
         public string QuantityUnitOfMeasure { get; set; }
 
-        
+        [Required]
         public bool ErrorOccurred { get; set; }
 
         
@@ -90,10 +90,10 @@ namespace BenMedica.Api {
         public DispensableProduct DispensableProduct { get; set; }
 
         
-        public int? DaysSupply { get; set; }
+        public int DaysSupply { get; set; }
 
         
-        public decimal? Quantity { get; set; }
+        public decimal Quantity { get; set; }
 
       
         public string QuantityUnitOfMeasure { get; set; }

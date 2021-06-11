@@ -4,9 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BenMedica.Api {
-    /// <summary>
-    ///  The SmartAltsRequest
-    /// </summary>
+    
     public class SmartAltsRequest {
         public string TransactionId { get; set; }
         
