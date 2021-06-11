@@ -26,6 +26,8 @@ namespace BenMedica.Api.Controllers {
         /// <response code = "200">Returns the SmartAltsResponse</response>
         /// <response code = "400">Returns the HttpClientErrorResponse</response>
         [HttpPost]
+        [Produces("application/json")]
+        [Consumes("application/json")]
         [ProducesResponseType(typeof(SmartAltsResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(HttpClientErrorResponse), StatusCodes.Status400BadRequest)]
         public IActionResult Post([FromBody] SmartAltsRequest smartAltsRequest) {
@@ -39,7 +41,7 @@ namespace BenMedica.Api.Controllers {
 
                 //if (!requestProcessor.IsSourceProductRequestCodeFoundInDatabase(smartAltsRequest))
                 //    return BadRequest(requestProcessor.GenerateErrorResponse(ModelState, smartAltsRequest));
-
+                
                 return Ok(requestProcessor.ProcessRequest(smartAltsRequest));
 
             } catch (Exception exception) {

@@ -13,7 +13,7 @@ namespace BenMedica.Api.Processor {
         public RequestProcessor(SmartAltsResponse AltsResponse) {
             smartAltsResponse = AltsResponse;
         }
-        public string ProcessRequest(SmartAltsRequest smartAltsRequest) {
+        public SmartAltsResponse ProcessRequest(SmartAltsRequest smartAltsRequest) {
 
             switch (smartAltsRequest.SourceProductRequest.DispensableProduct.Code) {
 
@@ -31,13 +31,13 @@ namespace BenMedica.Api.Processor {
                                 case "00074329013":
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
-                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30.0m, "C64933");
                                     break;
 
                                 case "00078037905":
                                     alternativeProductResponse.DispensableProductDescription = item.DispensableProductDescription;
                                     alternativeProductResponse.DispensableProduct = item.DispensableProduct;
-                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30, "C64933");
+                                    (alternativeProductResponse.DaysSupply, alternativeProductResponse.Quantity, alternativeProductResponse.QuantityUnitOfMeasure) = AssignValues(30, 30.0m, "C64933");
                                     break;
 
                                 default:
@@ -205,12 +205,8 @@ namespace BenMedica.Api.Processor {
             }
 
             smartAltsResponse.AlternativeProductResponses = smartAltsResponse.AlternativeProductResponses?.OrderBy(x => x.DispensableProduct.Code).ToList();
-            return JsonConvert.SerializeObject(smartAltsResponse, Formatting.Indented, new JsonSerializerSettings {
-                NullValueHandling = NullValueHandling.Ignore,
-                DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                DateFormatString = "o"
-            });
-        }
+            return smartAltsResponse;
+            }
 
         public bool IsSourceProductRequestCodeFoundInDatabase(SmartAltsRequest smartAltsRequest) {
 
@@ -300,7 +296,7 @@ namespace BenMedica.Api.Processor {
         }
 
 
-        public string GenerateErrorResponse(ModelStateDictionary modelState, SmartAltsRequest smartAltsRequest, bool isSourceProductRequestCodeFound) {
+        public HttpClientErrorResponse GenerateErrorResponse(ModelStateDictionary modelState, SmartAltsRequest smartAltsRequest, bool isSourceProductRequestCodeFound) {
             List<Error> errors = new List<Error>();
             foreach (var item in modelState.Keys) {
                 if (item == "PayerId") {
@@ -323,17 +319,11 @@ namespace BenMedica.Api.Processor {
                     ErrorDescription = "Invalid Request: InvalidOperationException"
                 });
             }
-            return JsonConvert.SerializeObject(
-                        new HttpClientErrorResponse {
-                            TransactionId = smartAltsRequest.TransactionId,
-                            PayerId = smartAltsRequest.PayerId,
-                            Errors = errors
-
-                        }, Formatting.Indented, new JsonSerializerSettings {
-                            NullValueHandling = NullValueHandling.Ignore,
-                            DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                            DateFormatString = "o"
-                        });
+            return new HttpClientErrorResponse {
+                TransactionId = smartAltsRequest.TransactionId,
+                PayerId = smartAltsRequest.PayerId,
+                Errors = errors
+            };
 
         }
 
