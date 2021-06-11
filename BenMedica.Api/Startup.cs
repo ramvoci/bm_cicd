@@ -37,13 +37,13 @@ namespace BenMedica.Api {
                             options.SuppressModelStateInvalidFilter = true;
                             }).SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
             services.AddTransient<SmartAltsResponse>();
-
+            
             var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             services.AddSwaggerGen(c => {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BenMedica.Api", Version = "v1" });
-                c.IncludeXmlComments(xmlPath);
-                c.MapType<decimal>(()=> new OpenApiSchema { Type="number", Format="decimal" });
+              c.SwaggerDoc("v1", new OpenApiInfo { Title = "BenMedica.Api", Version = "v1" });
+              c.IncludeXmlComments(xmlPath);
+              c.MapType<decimal>(()=> new OpenApiSchema { Type="number", Format="decimal" });
                 //c.MapType<DateTime>(() => new OpenApiSchema {
                 //    Type = "string",
                 //    Format = "date-time",
@@ -69,9 +69,9 @@ namespace BenMedica.Api {
 
             app.UseAuthorization();
 
-            app.UseSwagger();
+            app.UseSwagger();            
             app.UseSwaggerUI(c => {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BenMedica v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "BenMedica v1");               
                 c.RoutePrefix = "api/swagger";
             });
 
